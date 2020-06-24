@@ -49,6 +49,7 @@ static struct page_table_t * get_page_table(
 	 * field of the row is equal to the index
 	 *
 	 * */
+
 	int i;
 	for (i = 0; i < seg_table->size; i++) {
 		// Enter your code here
@@ -81,7 +82,7 @@ static int translate(
 	if (page_table == NULL) {
 		return 0;
 	}
-	
+
 	int i;
 	for (i = 0; i < page_table->size; i++) {
 		if (page_table->table[i].v_index == second_lv) {
@@ -89,7 +90,7 @@ static int translate(
 			 * to [p_index] field of page_table->table[i] to 
 			 * produce the correct physical address and save it to
 			 * [*physical_addr]  */
-			*physical_addr = (page_table->table[i].p_index << OFFSET_LEN) | offset;
+			*physical_addr = (page_table->table[i].p_index << OFFSET_LEN) + offset;
 			return 1;
 		}
 	}
@@ -103,8 +104,9 @@ addr_t alloc_mem(uint32_t size, struct pcb_t * proc) {
 	 * process [proc] and save the address of the first
 	 * byte in the allocated memory region to [ret_mem].
 	 * */
-	
-	uint32_t num_pages = (size % PAGE_SIZE) ? size / PAGE_SIZE : size / PAGE_SIZE + 1; // Number of pages we will use
+
+	uint32_t num_pages = (size % PAGE_SIZE) ? size / PAGE_SIZE :
+		size / PAGE_SIZE + 1; // Number of pages we will use
 	int mem_avail = 0; // We could allocate new memory region or not?
 
 	/* First we must check if the amount of free memory in
@@ -188,5 +190,4 @@ void dump(void) {
 		}
 	}
 }
-
 
